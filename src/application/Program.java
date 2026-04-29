@@ -1,5 +1,7 @@
 package application;
 
+import model.dao.DaoFactory;
+import model.dao.SellerDao;
 import model.entities.Departament;
 import model.entities.Seller;
 
@@ -10,6 +12,7 @@ public class Program {
         Departament obj = new Departament(1, "books");
         Seller seller = new Seller(21,"bob","bob@",new Date(),3000.00,obj);
         System.out.println(seller);
+        SellerDao sellerDao = DaoFactory.createSellerDao();//voce esconde aonde esta a implementação, e so mostra a interface, injeção de depedência
 
 
     }
