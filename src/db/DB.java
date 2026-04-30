@@ -55,7 +55,7 @@ public class DB {
             }//tratando as execeções de Statement e ResulSet.
         }
     }
-    public static void closeResult(ResultSet rs) {
+    public static void closeResultSet(ResultSet rs) {
         if (rs != null) {
             try {
                 rs.close();
