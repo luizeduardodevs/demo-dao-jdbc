@@ -49,16 +49,8 @@ public class SellerDaoJDBC implements SellerDao {
             st.setInt(1,id);
             rs = st.executeQuery();//o resultado vai cair dentro do resultSet
             if(rs.next()){// esse rs.next e para testar se veio algum resultado, se caso a consulta rs acima retornou algum valor.
-                Departament dep = new Departament();
-                dep.setId(rs.getInt("DepartmentId"));//acessa a coluna que esta dentro da tabela passando o nome da coluna
-                dep.setName(rs.getString("DepName"));
-                Seller obj = new Seller();
-                obj.setId(rs.getInt("Id"));
-                obj.setName(rs.getString("Name"));
-                obj.setEmail(rs.getString("Email"));
-                obj.setBaseSalary(rs.getDouble("BaseSalary"));
-                obj.setBirthDate(rs.getDate("BirthDate"));
-                obj.setDepartament(dep);// a associação e feita por objetos, no caso o objetp criado atraves da classe Departament, que foi instanciado em cima.
+                Departament dep = instantiateDepartment(rs);
+                Seller obj = instantieSeller(rs,dep);
                 //dentro da classe SELLER tem a injenção de departamento.
                 return obj;//retorna o objeto seller
             }
@@ -71,6 +63,24 @@ public class SellerDaoJDBC implements SellerDao {
             DB.closeStatement(st);
         }
 
+    }
+
+    private Seller instantieSeller(ResultSet rs, Departament dep) throws SQLException {//propagando exceção
+        Seller obj = new Seller();
+        obj.setId(rs.getInt("Id"));
+        obj.setName(rs.getString("Name"));
+        obj.setEmail(rs.getString("Email"));
+        obj.setBaseSalary(rs.getDouble("BaseSalary"));
+        obj.setBirthDate(rs.getDate("BirthDate"));
+        obj.setDepartament(dep);// a associação e feita por objetos, no caso o objetp criado atraves da classe Departament, que foi instanciado em cima.
+        return obj;
+    }
+
+    private Departament instantiateDepartment(ResultSet rs)throws SQLException {
+        Departament dep = new Departament();
+        dep.setId(rs.getInt("DepartmentId"));//acessa a coluna que esta dentro da tabela passando o nome da coluna
+        dep.setName(rs.getString("DepName"));//necessrio tratar exceção de resultSet,porem ela ja ta sendo tratada no catch
+        return dep;
     }
 
     @Override
