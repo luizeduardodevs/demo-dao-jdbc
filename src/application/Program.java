@@ -7,6 +7,7 @@ import model.entities.Seller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 public class Program {
     public static void main(String[] args){
@@ -25,16 +26,24 @@ public class Program {
         list = sellerDao.findAll();
         for (Seller obj: list){
             System.out.println(obj);
-        }
+        }/*
         System.out.println("\n=== TEST 4 seller INSERT ===");
         Seller seller1 = new Seller(null,"Greg","greg@gmail.com", new Date(),4000.00,departament);//aproveitou o objeto departament
         sellerDao.insert(seller1);//passa o parametro da interface
         System.out.println("Inserted! new id: "+ seller1.getId());
-
+*/
         System.out.println("\n=== TEST 5 seller UPDATE ===");
         seller = sellerDao.findById(1);//seller vai receber a pesquisa de encontro pelo id = 1
         seller.setName("Martha Waine");//modificou o nome
         sellerDao.update(seller);//e dentro da atualização passou seller pra atualizar os dados.
         System.out.println("Update completed");
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\n=== TEST 6 seller Delete ===");
+        System.out.print("Enter o id for delete test: ");
+        int id = sc.nextInt();
+        sellerDao.deleteById(id);
+        System.out.println("Delete completed");
+
     }
 }

@@ -68,7 +68,7 @@ public class SellerDaoJDBC implements SellerDao {
             st.setInt(5,obj.getDepartament().getId());//acessa o departamento e depois pegar o id do departamento
             st.setInt(6,obj.getId());// pegar o id do vendedor
             st.executeUpdate();
-            
+
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         }finally {
@@ -78,7 +78,20 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void deleteById(Integer id) {
-
+        PreparedStatement st = null;
+        try{
+            st = conn.prepareStatement(
+                    "DELETE FROM seller WHERE Id = ? ");//caso nao exista o id ele roda normalmente.
+            st.setInt(1,id);
+            int rows = st.executeUpdate();
+            if(rows == 0){//mostra que deu erro e que nao exista nenhum id desse
+                throw new DbException("No delected Id ");
+            }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }finally{
+            DB.closeStatement(st);
+        }
     }
 
     @Override
