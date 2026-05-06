@@ -5,6 +5,7 @@ import model.dao.SellerDao;
 import model.entities.Departament;
 import model.entities.Seller;
 
+import java.util.Date;
 import java.util.List;
 
 public class Program {
@@ -25,6 +26,9 @@ public class Program {
         for (Seller obj: list){
             System.out.println(obj);
         }
-
+        System.out.println("\n=== TEST 4 seller INSERT ===");
+        Seller seller1 = new Seller(null,"Greg","greg@gmail.com", new Date(),4000.00,departament);//aproveitou o objeto departament
+        sellerDao.insert(seller1);//passa o parametro da interface
+        System.out.println("Inserted! new id: "+ seller1.getId());
     }
 }

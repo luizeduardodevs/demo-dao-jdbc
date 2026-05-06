@@ -6,10 +6,7 @@ import model.dao.SellerDao;
 import model.entities.Departament;
 import model.entities.Seller;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +22,35 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void insert(Seller obj) {
-
+        PreparedStatement st = null;
+        try{
+            st = conn.prepareStatement(
+                "INSERT INTO seller "
+                +"(Name, Email, BirthDate, BaseSalary, DepartmentId) "
+                +"VALUES"
+                +"(?, ?, ?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS);//retorna o id do novo vendedor inserido
+            st.setString(1,obj.getName());
+            st.setString(2,obj.getEmail());
+            st.setDate(3,new java.sql.Date(obj.getBirthDate().getTime()));//pra buscar a data. instanciado uma data
+            st.setDouble(4,obj.getBaseSalary());
+            st.setInt(5,obj.getDepartament().getId());//acessa o departamento e depois pegar o id do departamento
+        int rowsAffected = st.executeUpdate();
+        if(rowsAffected>0){
+            ResultSet rs = st.getGeneratedKeys();
+            if(rs.next()){
+                int id = rs.getInt(1);//PEGA O VALOR DO ID GERADO
+                obj.setId(id);//atribuindo o id acima dentro do argumento la do SELLER OBJ
+            }
+            DB.closeResultSet(rs);//pode fechar dentro dos if pq ele foi criado apenas aqui
+        }else {
+            throw new DbException("ERRO inesperad nenhuma linha afetada");
+        }
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }finally {
+            DB.closeStatement(st);
+        }
     }
 
     @Override
